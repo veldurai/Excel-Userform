@@ -1,0 +1,464 @@
+Dim FSO3 As Object
+Dim exp, txt As String
+
+
+
+Private Sub CommandButton1_Click()
+Shell "C:\Program Files\JSTORBOOKS\Jstor-PPA-Inventory\PPA-INVENTORY-4.0.0.0.exe", vbNormalFocus
+End Sub
+
+Private Sub CommandButton11_Click()
+Shell "C:\Program Files\Microsoft Office\Office12\OUTLOOK.EXE", vbNormalFocus
+End Sub
+
+Private Sub CommandButton12_Click()
+ActiveWorkbook.FollowHyperlink "http://172.16.16.133:8080/jbooksReport/", NewWindow:=True
+End Sub
+
+Private Sub CommandButton13_Click()
+    Application.Visible = True
+    Dim xRow As Long
+    Dim InitialFoldr$
+    InitialFoldr$ = "L:\Books-Received-FTP\"
+ Workbooks.Open ("L:\Testbackup\set1.csv")
+    Workbooks("set1.csv").Activate
+    
+    Sheets(1).Select
+    Sheets(1).Cells.Clear
+    With Application.FileDialog(msoFileDialogFolderPicker)
+        .InitialFileName = Application.DefaultFilePath & "\"
+        .Title = "Please select a folder to list Files from"
+        .InitialFileName = InitialFoldr$
+        .Show
+        If .SelectedItems.Count <> 0 Then
+            xDirect$ = .SelectedItems(1) & "\"
+            xFname$ = Dir(xDirect$, 7)
+            Do While xFname$ <> ""
+                ActiveCell.Offset(xRow) = xFname$
+                xRow = xRow + 1
+                xFname$ = Dir
+            Loop
+        End If
+        End With
+        ActiveWorkbook.Close
+        
+
+End Sub
+
+Private Sub CommandButton14_Click()
+    Dim FSO As Object
+    Dim FromPath As String
+    Dim ToPath As String
+    Dim xDirect$, InitialFoldr$
+    InitialFoldr$ = "L:\Books-Received-FTP\"
+With Application.FileDialog(msoFileDialogFolderPicker)
+        .InitialFileName = Application.DefaultFilePath & "\"
+        .Title = "Please select a folder to list Files from"
+        .InitialFileName = InitialFoldr$
+        .Show
+         xDirect$ = .SelectedItems(1)
+    FromPath = xDirect$
+    ToPath = "L:\Wip"
+
+    'you can create a unique folder with a Date/Time stamp.
+    'ToPath = "C:\Users\Ron\" & Format(Now, "yyyy-mm-dd h-mm-ss")
+
+    If Right(FromPath, 1) = "\" Then
+        FromPath = Left(FromPath, Len(FromPath) - 1)
+    End If
+
+    If Right(ToPath, 1) = "\" Then
+        ToPath = Left(ToPath, Len(ToPath) - 1)
+    End If
+
+    Set FSO = CreateObject("scripting.filesystemobject")
+
+    If FSO.FolderExists(FromPath) = False Then
+        MsgBox FromPath & " doesn't exist"
+        Exit Sub
+    End If
+
+    FSO.CopyFolder Source:=FromPath, Destination:=ToPath
+    MsgBox "You can find the files and subfolders from " & FromPath & " in " & ToPath
+
+End With
+
+End Sub
+
+Private Sub CommandButton15_Click()
+Dim MyData As DataObject
+Dim strClip As String
+strClip = "L:\Testbackup\set1.csv"
+Set MyData = New DataObject
+MyData.SetText strClip
+MyData.PutInClipboard
+Shell "C:\Js-Download\Jstor_Download.exe", vbNormalFocus
+End Sub
+
+
+
+Private Sub CommandButton16_Click()
+Workbooks.Open ("L:\Production\VelDurai\DOI.xlsx")
+    Workbooks("DOI.xlsx").Activate
+        Sheets(1).Select
+   Sheets(1).Columns("E").EntireColumn.Clear
+    ActiveWorkbook.Save
+        ActiveWorkbook.Close
+Application.Visible = True
+    Dim wkbkorigin As Workbook
+    Dim wkbkdestination As Workbook
+    Dim originsheet As Worksheet
+    Dim destsheet As Worksheet
+    Dim lastrow, lastrow1 As Integer
+    Dim MyData As DataObject
+Dim strClip As String
+
+    Set wkbkorigin = Workbooks.Open("L:\Testbackup\set1.csv")
+    Set wkbkdestination = Workbooks.Open("L:\Production\VelDurai\DOI.xlsx")
+    Set originsheet = wkbkorigin.Worksheets("set1")
+    Set destsheet = wkbkdestination.Worksheets("Sheet1")
+    lastrow = originsheet.Range("A1").End(xlDown).Row
+    originsheet.Range("A1:A" & lastrow).Copy
+    destsheet.Range("E1:E" & lastrow).PasteSpecial
+ wkbkorigin.Close
+ wkbkdestination.Save
+
+ destsheet.Range("D1:D" & lastrow).Copy
+  wkbkdestination.Close
+End Sub
+
+Private Sub CommandButton17_Click()
+Shell "C:\Program Files\EditPlus 3.31\editplus.exe L:\Listfile\DOI.xml", vbNormalFocus
+End Sub
+
+Private Sub CommandButton18_Click()
+Application.Visible = True
+    Dim wkbkorigin As Workbook
+    Dim wkbkdestination As Workbook
+    Dim originsheet As Worksheet
+    Dim destsheet As Worksheet
+    Dim lastrow, lastrow1 As Integer
+    Dim MyData As DataObject
+Dim strClip As String
+
+    Set wkbkorigin = Workbooks.Open("L:\Production\VelDurai\DOI.xlsx")
+    Set wkbkdestination = Workbooks.Open("L:\Tracking Sheet\Remaining Books.xlsx")
+    Set originsheet = wkbkorigin.Worksheets("sheet1")
+    Set destsheet = wkbkdestination.Worksheets("Sheet1")
+    lastrow = originsheet.Range("C1").End(xlDown).Row
+    originsheet.Range("C1:C" & lastrow).Copy
+ wkbkorigin.Close
+ wkbkdestination.Close
+ Set x2 = CreateObject("Excel.application")
+x2.Application.Workbooks.Open "L:\Tracking Sheet\Remaining Books.xlsx"
+x2.Application.Visible = True
+
+End Sub
+
+Private Sub CommandButton2_Click()
+Shell "L:\Tools\Changeprocess\QA to Collate\Jstor-QA to collate.exe", vbNormalFocus
+End Sub
+
+Private Sub CommandButton20_Click()
+Shell "C:\WINDOWS\explorer.exe L:\FILES ALLOTED\Files for production\Production Excel", vbNormalFocus
+End Sub
+
+Private Sub CommandButton21_Click()
+
+Set x3 = CreateObject("Excel.application")
+x3.Application.Workbooks.Open "L:\Tracking Sheet\Daily Report\Daily report Books.xlsx"
+x3.Application.Visible = True
+
+End Sub
+
+Private Sub CommandButton22_Click()
+TextBox1.Text = ""
+Dim readypathvar, shipmentfoldr As String
+    shipmentfoldr = "L:\shipment\"
+With Application.FileDialog(msoFileDialogFolderPicker)
+        .InitialFileName = Application.DefaultFilePath & "\"
+        .Title = "Please select a Ready folder"
+        .InitialFileName = shipmentfoldr
+        .Show
+         TextBox1.Text = .SelectedItems(1)
+    
+         End With
+End Sub
+
+Private Sub CommandButton23_Click()
+On Error Resume Next
+
+exp = "c:\windows\explorer.exe"
+txt = TextBox1.Text
+Shell exp & " " & txt, vbNormalFocus
+ActiveWorkbook.FollowHyperlink "file:///L:/SHIPMENT/Query/JSTOR.htm", NewWindow:=True
+Set x3 = CreateObject("Excel.application")
+x3.Application.Workbooks.Open "L:\Tracking Sheet\Remaining Books.xlsx"
+x3.Application.Visible = True
+On Error GoTo 0
+End Sub
+
+Private Sub CommandButton24_Click()
+On Error Resume Next
+Set x3 = CreateObject("Excel.application")
+x3.Application.Workbooks.Open "L:\SHIPMENT PROCEDURES\shipment Procedures before Zip\Shipment procedure before zip.xls"
+x3.Application.Visible = True
+Dim MyData As DataObject
+Dim strClip As String
+strClip = TextBox1.Text
+Set MyData = New DataObject
+MyData.SetText strClip
+MyData.PutInClipboard
+On Error GoTo 0
+Shell "C:\Program Files\EditPlus 3.31\editplus.exe 1.txt", vbNormalFocus
+End Sub
+
+Private Sub CommandButton25_Click()
+txt = TextBox1.Text & "\ready\"
+exp = "c:\windows\explorer.exe"
+Shell exp & " " & txt, vbNormalFocus
+
+txt = TextBox1.Text & "..\input"
+exp = "c:\windows\explorer.exe"
+Shell exp & " " & txt, vbNormalFocus
+End Sub
+
+Private Sub CommandButton26_Click()
+txt = TextBox1.Text & "..\input\123\"
+exp = "c:\windows\explorer.exe"
+Shell exp & " " & txt, vbNormalFocus
+End Sub
+
+Private Sub CommandButton27_Click()
+Shell "c:\windows\explorer.exe C:\Documents and Settings\All Users\Desktop\2012-08-23\", vbNormalFocus
+End Sub
+
+Private Sub CommandButton29_Click()
+MsgBox "Output Path: Rady Folder, Input Path: IP "
+Shell "C:\Program Files\Dashboard\excelcreation.exe", vbNormalFocus
+End Sub
+
+Private Sub CommandButton3_Click()
+Shell "C:\Program Files\JSTORBOOKS\JSTOR-Collate\JSTOR-Collate.exe", vbNormalFocus
+End Sub
+
+Private Sub CommandButton30_Click()
+txt = TextBox1.Text & "..\"
+exp = "c:\windows\explorer.exe"
+Shell exp & " " & txt, vbNormalFocus
+End Sub
+
+Private Sub CommandButton31_Click()
+Shell "c:\windows\explorer.exe L:\Production\VelDurai\00Auto QC\New tool\Jstor-Books-QC-August-13\", vbNormalFocus
+
+End Sub
+
+Private Sub CommandButton32_Click()
+Shell "c:\windows\explorer.exe  L:\Production\VelDurai\00Auto QC\Updated Tool\", vbNormalFocus
+End Sub
+
+Private Sub CommandButton33_Click()
+On Error Resume Next
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.xml"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.pdf"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.txt"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.err"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.log"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.csv"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.zip"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.bak"
+On Error GoTo 0
+
+Dim i As Long
+Dim sFolder As String
+Dim sSource As String
+Dim sTarget As String
+Dim xDirect$, InitialFoldr$
+    InitialFoldr$ = "L:\shipment\"
+With Application.FileDialog(msoFileDialogFolderPicker)
+        .InitialFileName = Application.DefaultFilePath & "\"
+        .Title = "Please select a folder to list Files from"
+        .InitialFileName = InitialFoldr$
+        .Show
+         sSource = .SelectedItems(1)
+sTarget = "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\"
+Set FSO3 = CreateObject("Scripting.FileSystemObject")
+On Error Resume Next
+If FSO3.GetFolder(sTarget) Is Nothing Then
+MkDir sTarget
+End If
+On Error GoTo 0
+CopyFiles sSource, sTarget
+End With
+On Error Resume Next
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.pdf"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.txt"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.err"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.log"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.csv"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.zip"
+Kill "L:\Production\VelDurai\JSTORE_DTD-Val\J-val\*.bak"
+On Error GoTo 0
+Shell "c:\windows\explorer.exe L:\Production\VelDurai\JSTORE_DTD-Val\J-val\", vbNormalFocus
+
+End Sub
+
+Sub CopyFiles(ByVal Source As String, ByVal Target As String)
+Dim oFldr As Object
+Dim oFolder As Object
+Dim oFile As Object
+Dim oFiles As Object
+Dim sTarget As String
+Set oFolder = FSO3.GetFolder(Source)
+If InStr(4, oFolder.path, "\") = 0 Then
+sTarget = Target
+Else
+sTarget = Target & Mid(Source, InStr(4, oFolder.path, "\"), 255)
+End If
+On Error Resume Next
+If FSO3.GetFolder(sTarget) Is Nothing Then
+MkDir sTarget
+End If
+On Error GoTo 0
+Set oFolder = FSO3.GetFolder(Source)
+Set oFiles = oFolder.Files
+For Each oFile In oFiles
+oFile.Copy ("L:\Production\VelDurai\JSTORE_DTD-Val\J-val\")
+Next oFile
+For Each oFldr In oFolder.Subfolders
+CopyFiles oFldr.path, Target
+Next
+End Sub
+
+Private Sub CommandButton34_Click()
+MsgBox "Include the ready folder"
+Shell "c:\windows\explorer.exe C:\Documents and Settings\All Users\Desktop\Zip Creator\", vbNormalFocus
+End Sub
+
+Private Sub CommandButton35_Click()
+Shell "L:\Tools\Changeprocess\QA to Collate\Jstor-Processchange.exe", vbNormalFocus
+End Sub
+
+Private Sub CommandButton36_Click()
+ Dim FSO As Object
+    Dim FromPath As String
+    Dim ToPath, exten As String
+  
+    
+    FromPath = TextBox1.Text
+    ToPath = "L:\Re-Shipment"
+exten = "*.zip*"
+    'you can create a unique folder with a Date/Time stamp.
+    'ToPath = "C:\Users\Ron\" & Format(Now, "yyyy-mm-dd h-mm-ss")
+
+    If Right(FromPath, 1) = "\" Then
+        FromPath = Left(FromPath, Len(FromPath) - 1)
+    End If
+
+    If Right(ToPath, 1) = "\" Then
+        ToPath = Left(ToPath, Len(ToPath) - 1)
+    End If
+
+    Set FSO = CreateObject("scripting.filesystemobject")
+
+    If FSO.FolderExists(FromPath) = False Then
+        MsgBox FromPath & " doesn't exist"
+        Exit Sub
+    End If
+
+    FSO.moveFolder Source:=FromPath & exten, Destination:=ToPath
+    MsgBox "You can find the files and subfolders from " & FromPath & " in " & ToPath
+
+End Sub
+
+Private Sub CommandButton37_Click()
+Shell "C:\Program Files\JSTORBOOKS\Jstor_Upload\Jstor_Upload.exe", vbNormalFocus
+End Sub
+
+Private Sub CommandButton38_Click()
+ActiveWorkbook.FollowHyperlink "http://172.16.16.27/jstor-book/", NewWindow:=True
+End Sub
+
+Private Sub CommandButton39_Click()
+MsgBox "Move Shiped Files To Old Shipment"
+Shell "c:\windows\explorer.exe L:\Shipment", vbNormalFocus
+End Sub
+
+Private Sub CommandButton4_Click()
+Shell "C:\Program Files\Change_Process\Jstor-Processchange.exe", vbNormalFocus
+End Sub
+
+Private Sub CommandButton40_Click()
+Workbooks.Open ("L:\Production\VelDurai\00Auto QC\Auto qc.xlsx")
+    Workbooks("Auto qc.xlsx").Activate
+        Sheets(2).Select
+   Sheets(2).Columns(1).EntireColumn.Clear
+   Sheets(2).Columns(2).EntireColumn.Clear
+    ActiveWorkbook.Save
+        ActiveWorkbook.Close
+txt = TextBox1.Text & "..\"
+exp = "c:\windows\explorer.exe"
+Shell exp & " " & txt, vbNormalFocus
+Set x3 = CreateObject("Excel.application")
+x3.Application.Workbooks.Open "L:\Production\VelDurai\00Auto QC\Auto qc.xlsx"
+x3.Application.Visible = True
+On Error Resume Next
+Dim MyData As DataObject
+Dim strClip As String
+strClip = TextBox1.Text
+Set MyData = New DataObject
+MyData.SetText strClip
+MyData.PutInClipboard
+On Error GoTo 0
+End Sub
+
+Private Sub CommandButton41_Click()
+Set x3 = CreateObject("Excel.application")
+x3.Application.Workbooks.Open "L:\Customer-Excel\Books Assigned to Vendors Report.xlsx"
+x3.Application.Visible = True
+txt = TextBox1.Text & "..\"
+exp = "c:\windows\explorer.exe"
+Shell exp & " " & txt, vbNormalFocus
+End Sub
+
+Private Sub CommandButton42_Click()
+Set x3 = CreateObject("Excel.application")
+x3.Application.Workbooks.Open "L:\Tracking Sheet\Production Excel\consolidated excel.xlsx"
+x3.Application.Visible = True
+Set x4 = CreateObject("Excel.application")
+x4.Application.Workbooks.Open "L:\Tracking Sheet\Remaining Books.xlsx"
+x4.Application.Visible = True
+End Sub
+
+Private Sub CommandButton5_Click()
+Call Shell("c:\windows\explorer.exe C:\Program Files\JSTORBOOKS\Jstor_Validation\", vbNormalFocus)
+End Sub
+
+Private Sub CommandButton6_Click()
+Shell "C:\Program Files\JSTORBOOKS\Shipment_07-04-12\Jstor_Shipment.exe", vbNormalFocus
+End Sub
+
+
+
+Private Sub RefEdit1_BeforeDragOver(Cancel As Boolean, ByVal Data As MSForms.DataObject, ByVal x As stdole.OLE_XPOS_CONTAINER, ByVal y As stdole.OLE_YPOS_CONTAINER, ByVal DragState As MSForms.fmDragState, Effect As MSForms.fmDropEffect, ByVal Shift As Integer)
+
+End Sub
+
+Private Sub Frame3_Click()
+
+End Sub
+
+Private Sub Image1_Click()
+
+End Sub
+
+Private Sub Label1_Click()
+
+End Sub
+
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    ThisWorkbook.Close SaveChanges:=True
+    Application.Visible = True
+    Application.Quit
+End Sub
+
